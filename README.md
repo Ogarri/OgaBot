@@ -24,25 +24,45 @@ node main.js
 
 ```
 OgaBot/
-├── commands/          # Commandes slash
+├── assets/
+│   └── champslol.json      # Base de données des champions League of Legends
+├── commands/               # Commandes slash
+│   ├── leagueoflegends/
+│   │   ├── champroll.js    # Sélection aléatoire de champion
+│   │   └── getchamp.js     # Récupérer les infos d'un champion spécifique
 │   └── utils/
-│       └── ping.js
-├── events/            # Événements Discord
-│   └── bot/
-│       └── ready.js
-├── interaction/       # Gestionnaires d'interactions
-│   └── interactionCreate.js
-├── loaders/           # Chargeurs de modules
+│       ├── ping.js         # Latence du bot
+│       └── status.js       # Status du bot et des APIs
+├── events/                 # Événements Discord
+│   └── client/
+│       ├── interactionCreate.js    # Gestionnaire d'interactions
+│       └── ready.js                # Bot ready event
+├── loaders/                # Chargeurs de modules
 │   ├── loadCommands.js
 │   └── loadEvents.js
-├── main.js            # Point d'entrée du bot
+├── main.js                 # Point d'entrée du bot
 └── README.md
 ```
 
 ## Commandes disponibles
 
-### /ping
+### Commandes League of Legends
+#### /champroll
+Sélectionne un champion aléatoire parmi tous les champions League of Legends.
+- **Paramètres** : `role` (Top, Jungle, Mid, ADC, Support, Random)
+- **Affiche** : Nom du champion, rôle, catégorie, icône du rôle, et splash art
+
+#### /getchamp
+Obtient les informations détaillées d'un champion spécifique.
+- **Paramètres** : `nom` (Nom du champion)
+- **Affiche** : Nom du champion, rôle, catégorie, icône du rôle, et splash art
+
+### Commandes Utilitaires
+#### /ping
 Affiche la latence du bot en millisecondes.
+
+#### /status
+Affiche le status du bot (État, Ping, Uptime, Nombre de serveurs, Nombre d'utilisateurs).
 
 ## Développement
 
