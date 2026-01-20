@@ -1,6 +1,6 @@
 const fs = require('fs');
 const path = require('path');
-const { SlashCommandBuilder } = require('discord.js');
+const { SlashCommandBuilder, EmbedBuilder } = require('discord.js');
 
 const ACCOUNTS_FILE = path.join(__dirname, '../../assets/lolacc.json');
 
@@ -33,9 +33,25 @@ module.exports = {
             const gameName = removeAccount(interaction.user.id);
             console.log(`[LOL] ${interaction.user.username} (${interaction.user.id}) s'est déconnecté de ${gameName}`);
             
-            await interaction.editReply('✓ Compte supprimé avec succès!');
+            const embed = new EmbedBuilder()
+                .setColor('#00ff00')
+                .setTitle('✓ Compte supprimé')
+                .addFields(
+                    { name: '👤 Compte supprimé', value: gameName, inline: false }
+                )
+                .setFooter({ text: interaction.user.username })
+                .setTimestamp();
+            
+            await interaction.editReply({ embeds: [embed] });
         } catch (err) {
-            await interaction.editReply(`✗ Erreur: ${err.message}`);
+            const errorEmbed = new EmbedBuilder()
+                .setColor('#ff0000')
+                .setTitle('✗ Erreur')
+                .setDescription(err.message)
+                .setFooter({ text: interaction.user.username })
+                .setTimestamp();
+            
+            await interaction.editReply({ embeds: [errorEmbed] });
         }
     }
 };

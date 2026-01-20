@@ -2,7 +2,7 @@ require('dotenv').config();
 const https = require('https');
 const fs = require('fs');
 const path = require('path');
-const { SlashCommandBuilder } = require('discord.js');
+const { SlashCommandBuilder, EmbedBuilder } = require('discord.js');
 
 const LOL_API_KEY = process.env.LOL_API_KEY;
 const ACCOUNTS_FILE = path.join(__dirname, '../../assets/lolacc.json');
@@ -72,9 +72,26 @@ module.exports = {
             saveAccount(interaction.user.id, gameName, tagLine, puuid);
             console.log(`[LOL] ${interaction.user.username} (${interaction.user.id}) s'est connecté avec ${gameName}#${tagLine}`);
             
-            await interaction.editReply(`✓ Compte lié! ${gameName}#${tagLine}`);
+            const embed = new EmbedBuilder()
+                .setColor('#0099ff')
+                .setTitle('✓ Compte lié avec succès!')
+                .addFields(
+                    { name: '👤 Nom invocateur', value: `${gameName}#${tagLine}`, inline: false },
+                    { name: '🆔 PUUID', value: `\`${puuid}\``, inline: false }
+                )
+                .setFooter({ text: interaction.user.username })
+                .setTimestamp();
+            
+            await interaction.editReply({ embeds: [embed] });
         } catch (err) {
-            await interaction.editReply(`✗ Erreur: ${err.message}`);
+            const errorEmbed = new EmbedBuilder()
+                .setColor('#ff0000')
+                .setTitle('✗ Erreur')
+                .setDescription(err.message)
+                .setFooter({ text: interaction.user.username })
+                .setTimestamp();
+            
+            await interaction.editReply({ embeds: [errorEmbed] });
         }
     }
 };

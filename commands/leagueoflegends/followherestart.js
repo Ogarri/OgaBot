@@ -2,7 +2,7 @@ require('dotenv').config();
 const https = require('https');
 const fs = require('fs');
 const path = require('path');
-const { SlashCommandBuilder } = require('discord.js');
+const { SlashCommandBuilder, EmbedBuilder } = require('discord.js');
 
 const LOL_API_KEY = process.env.LOL_API_KEY;
 const ACCOUNTS_FILE = path.join(__dirname, '../../assets/lolacc.json');
@@ -87,21 +87,27 @@ async function checkNewMatches(channel, client) {
                     const participant = info.participants.find(p => p.puuid === account.puuid);
                     const gameDuration = Math.floor(info.gameDuration / 60);
                     const result = participant.win ? '✓ Victoire' : '✗ Défaite';
+                    const resultColor = participant.win ? '#00ff00' : '#ff0000';
                     const kda = `${participant.kills}/${participant.deaths}/${participant.assists}`;
                     const champion = participant.championName;
+                    const damage = participant.totalDamageDealt;
                     const timestamp = new Date(info.gameStartTimestamp).toLocaleString();
 
-                    const message = `**${account.gameName}#${account.tagLine}** vient de terminer un match!\n` +
-                        `\`\`\`\n` +
-                        `Champion: ${champion}\n` +
-                        `Résultat: ${result}\n` +
-                        `K/D/A: ${kda}\n` +
-                        `Durée: ${gameDuration}m\n` +
-                        `Match ID: ${latestMatchId}\n` +
-                        `Timestamp: ${timestamp}\n` +
-                        `\`\`\``;
+                    const embed = new EmbedBuilder()
+                        .setColor(resultColor)
+                        .setTitle(`🎮 ${account.gameName}#${account.tagLine}`)
+                        .setDescription(`Vient de terminer une partie`)
+                        .addFields(
+                            { name: '⚔️ Champion', value: champion, inline: true },
+                            { name: '📊 Résultat', value: result, inline: true },
+                            { name: '💀 K/D/A', value: kda, inline: true },
+                            { name: '🔥 Dégâts', value: damage.toString(), inline: true },
+                            { name: '⏱️ Durée', value: `${gameDuration}m`, inline: true },
+                            { name: '🆔 Match ID', value: `\`${latestMatchId}\``, inline: false }
+                        )
+                        .setFooter({ text: timestamp });
 
-                    await channel.send(message);
+                    await channel.send({ embeds: [embed] });
                     saveLastMatch(discordId, latestMatchId);
                     console.log(`[FOLLOWHERE] Nouveau match détecté pour ${account.gameName}#${account.tagLine}`);
                 }
