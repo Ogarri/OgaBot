@@ -7,7 +7,7 @@ module.exports = {
     .setDMPermission(true)
     .setDefaultMemberPermissions(null),
 
-    async run(interaction) {
+    async execute(interaction) {
         const client = interaction.client;
         const uptime = Math.floor(client.uptime / 1000);
         const days = Math.floor(uptime / 86400);
