@@ -10,7 +10,7 @@ module.exports = {
                 .setName("nom")
                 .setDescription("Nom du champion")
                 .setRequired(true)
-                .setAutocomplete(true)
+                .setAutocomplete(false)
         )
         .setDMPermission(true)
         .setDefaultMemberPermissions(null),
