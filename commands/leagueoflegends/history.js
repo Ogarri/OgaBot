@@ -2,7 +2,7 @@ require('dotenv').config();
 const https = require('https');
 const fs = require('fs');
 const path = require('path');
-const { SlashCommandBuilder } = require('discord.js');
+const { SlashCommandBuilder, EmbedBuilder } = require('discord.js');
 
 const LOL_API_KEY = process.env.LOL_API_KEY;
 const ACCOUNTS_FILE = path.join(__dirname, '../../assets/lolacc.json');
@@ -102,25 +102,51 @@ module.exports = {
             const rankedMatches = await getRankedMatches(account.puuid, 5);
             
             if (rankedMatches.length === 0) {
-                return await interaction.editReply('Aucun match ranked trouvé dans les 20 dernière parties.');
+                const errorEmbed = new EmbedBuilder()
+                    .setColor('#ff6600')
+                    .setTitle('⚠️ Aucun match trouvé')
+                    .setDescription('Aucun match ranked trouvé dans les 20 dernière parties.');
+                
+                return await interaction.editReply({ embeds: [errorEmbed] });
             }
             
-            let response = `**Historique de ${account.gameName}#${account.tagLine}** (${rankedMatches.length} matchs)\n\n`;
+            const embed = new EmbedBuilder()
+                .setColor('#0099ff')
+                .setTitle(`📊 Historique de ${account.gameName}#${account.tagLine}`)
+                .setDescription(`${rankedMatches.length} derniers matchs ranked`);
             
             rankedMatches.forEach((match, index) => {
                 const info = match.info;
                 const gameDuration = Math.floor(info.gameDuration / 60);
                 const participant = info.participants.find(p => p.puuid === account.puuid);
                 const result = participant.win ? '✓ Victoire' : '✗ Défaite';
+                const resultColor = participant.win ? '🟢' : '🔴';
                 const kda = `${participant.kills}/${participant.deaths}/${participant.assists}`;
                 const champion = participant.championName;
+                const damage = participant.totalDamageDealt;
                 
-                response += `${index + 1}. **${champion}** | ${result} | K/D/A: ${kda} | ${gameDuration}m\n`;
+                const fieldValue = `${resultColor} ${result}\n⚔️ Champion: ${champion}\n💀 K/D/A: ${kda}\n🔥 Dégâts: ${damage}\n⏱️ Durée: ${gameDuration}m`;
+                
+                embed.addFields({
+                    name: `Match ${index + 1}`,
+                    value: fieldValue,
+                    inline: false
+                });
             });
             
-            await interaction.editReply(response);
+            embed.setFooter({ text: interaction.user.username })
+                .setTimestamp();
+            
+            await interaction.editReply({ embeds: [embed] });
         } catch (err) {
-            await interaction.editReply(`✗ Erreur: ${err.message}`);
+            const errorEmbed = new EmbedBuilder()
+                .setColor('#ff0000')
+                .setTitle('✗ Erreur')
+                .setDescription(err.message)
+                .setFooter({ text: interaction.user.username })
+                .setTimestamp();
+            
+            await interaction.editReply({ embeds: [errorEmbed] });
         }
     }
 };
