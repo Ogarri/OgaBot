@@ -85,12 +85,17 @@ async function checkNewMatches(channel, client) {
                 if (matchDetails && matchDetails.info.queueId === 420) {
                     const info = matchDetails.info;
                     const participant = info.participants.find(p => p.puuid === account.puuid);
-                    const gameDuration = Math.floor(info.gameDuration / 60);
+                    const totalSeconds = info.gameDuration;
+                    const minutes = Math.floor(totalSeconds / 60);
+                    const seconds = totalSeconds % 60;
+                    const gameDurationFormatted = `${minutes}m${seconds}s`;
                     const result = participant.win ? '✓ Victoire' : '✗ Défaite';
                     const resultColor = participant.win ? '#00ff00' : '#ff0000';
                     const kda = `${participant.kills}/${participant.deaths}/${participant.assists}`;
                     const champion = participant.championName;
                     const damage = participant.totalDamageDealt;
+                    const totalCS = participant.totalMinionsKilled + participant.neutralMinionsKilled;
+                    const csPerMin = (totalCS / (totalSeconds / 60)).toFixed(2);
                     const timestamp = new Date(info.gameStartTimestamp).toLocaleString();
 
                     const embed = new EmbedBuilder()
@@ -102,7 +107,8 @@ async function checkNewMatches(channel, client) {
                             { name: '📊 Résultat', value: result, inline: true },
                             { name: '💀 K/D/A', value: kda, inline: true },
                             { name: '🔥 Dégâts', value: damage.toString(), inline: true },
-                            { name: '⏱️ Durée', value: `${gameDuration}m`, inline: true },
+                            { name: '⏱️ Durée', value: gameDurationFormatted, inline: true },
+                            { name: '🌾 CS/min', value: csPerMin, inline: true },
                             { name: '🆔 Match ID', value: `\`${latestMatchId}\``, inline: false }
                         )
                         .setFooter({ text: timestamp });

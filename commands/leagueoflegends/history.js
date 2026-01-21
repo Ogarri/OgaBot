@@ -117,15 +117,20 @@ module.exports = {
             
             rankedMatches.forEach((match, index) => {
                 const info = match.info;
-                const gameDuration = Math.floor(info.gameDuration / 60);
+                const totalSeconds = info.gameDuration;
+                const minutes = Math.floor(totalSeconds / 60);
+                const seconds = totalSeconds % 60;
+                const gameDurationFormatted = `${minutes}m${seconds}s`;
                 const participant = info.participants.find(p => p.puuid === account.puuid);
                 const result = participant.win ? '✓ Victoire' : '✗ Défaite';
                 const resultColor = participant.win ? '🟢' : '🔴';
                 const kda = `${participant.kills}/${participant.deaths}/${participant.assists}`;
                 const champion = participant.championName;
                 const damage = participant.totalDamageDealt;
+                const totalCS = participant.totalMinionsKilled + participant.neutralMinionsKilled;
+                const csPerMin = (totalCS / (totalSeconds / 60)).toFixed(2);
                 
-                const fieldValue = `${resultColor} ${result}\n⚔️ Champion: ${champion}\n💀 K/D/A: ${kda}\n🔥 Dégâts: ${damage}\n⏱️ Durée: ${gameDuration}m`;
+                const fieldValue = `${resultColor} ${result}\n⚔️ Champion: ${champion}\n💀 K/D/A: ${kda}\n🔥 Dégâts: ${damage}\n⏱️ Durée: ${gameDurationFormatted}\n🌾 CS/min: ${csPerMin}`;
                 
                 embed.addFields({
                     name: `Match ${index + 1}`,
