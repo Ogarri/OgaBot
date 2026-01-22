@@ -126,7 +126,7 @@ module.exports = {
                 const resultColor = participant.win ? '🟢' : '🔴';
                 const kda = `${participant.kills}/${participant.deaths}/${participant.assists}`;
                 const champion = participant.championName;
-                const damage = participant.totalDamageDealt;
+                const damage = participant.totalDamageDealtToChampions;
                 const totalCS = participant.totalMinionsKilled + participant.neutralMinionsKilled;
                 const csPerMin = (totalCS / (totalSeconds / 60)).toFixed(2);
                 
