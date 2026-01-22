@@ -28,14 +28,28 @@ OgaBot/
 ├── assets/
 │   ├── lolacc.json         # Comptes League of Legends liés
 │   ├── lastMatches.json    # Derniers matchs détectés
-│   └── champslol.json      # Base de données des champions
+│   ├── champslol.json      # Base de données des champions
+│   └── tracks/
+│       ├── youtubeDl.js    # Téléchargement YouTube
+│       ├── queueManager.js # Gestion de la queue musicale
+│       └── downloads/      # Fichiers MP3 téléchargés
 ├── commands/               # Commandes slash
-│   └── leagueoflegends/
-│       ├── loglolacc.js      # Lier un compte LOL
-│       ├── unloglolacc.js    # Délier un compte LOL
-│       ├── history.js        # Historique des matchs
-│       ├── followherestart.js # Démarrer la détection
-│       └── followherestop.js  # Arrêter la détection
+│   ├── leagueoflegends/
+│   │   ├── loglolacc.js      # Lier un compte LOL
+│   │   ├── unloglolacc.js    # Délier un compte LOL
+│   │   ├── history.js        # Historique des matchs
+│   │   ├── followherestart.js # Démarrer la détection
+│   │   └── followherestop.js  # Arrêter la détection
+│   └── music/
+│       ├── join.js         # Rejoindre le salon vocal
+│       ├── leave.js        # Quitter le salon vocal
+│       ├── play.js         # Jouer une musique YouTube
+│       ├── pause.js        # Mettre en pause
+│       ├── resume.js       # Reprendre
+│       ├── stop.js         # Arrêter
+│       ├── skip.js         # Passer à la suivante
+│       ├── queue.js        # Afficher la queue
+│       └── clearqueue.js   # Vider la queue
 ├── events/                 # Événements Discord
 │   └── client/
 │       ├── interactionCreate.js
@@ -54,10 +68,17 @@ Pour la liste complète des commandes, consultez [COMMANDES.md](./COMMANDES.md).
 
 ### Catégories
 
+- **Musique** : Lecture YouTube, gestion de la queue
 - **League of Legends** : Gestion des comptes et suivi des matchs
 - **Utilitaires** : Ping, Status
 
 ## Fonctionnalités principales
+
+### Lecteur musical avec YouTube
+- Téléchargement automatique de musiques YouTube en MP3
+- Système de queue pour écouter plusieurs musiques à la suite
+- Contrôle de la lecture (pause, reprise, arrêt, skip)
+- Gestion automatique des fichiers téléchargés
 
 ### Gestion des comptes League of Legends
 - Lier votre compte LOL à Discord
@@ -95,6 +116,10 @@ module.exports = {
 
 - Node.js >= 16.0.0
 - discord.js >= 14.0.0
+- @discordjs/voice
+- youtube-dl-exec
+- ffmpeg-static
+- @snazzah/davey
 - dotenv
 
 ## Licence
