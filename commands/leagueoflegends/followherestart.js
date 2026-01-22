@@ -93,7 +93,7 @@ async function checkNewMatches(channel, client) {
                     const resultColor = participant.win ? '#00ff00' : '#ff0000';
                     const kda = `${participant.kills}/${participant.deaths}/${participant.assists}`;
                     const champion = participant.championName;
-                    const damage = participant.totalDamageDealt;
+                    const damage = participant.totalDamageDealtToChampions;
                     const totalCS = participant.totalMinionsKilled + participant.neutralMinionsKilled;
                     const csPerMin = (totalCS / (totalSeconds / 60)).toFixed(2);
                     const timestamp = new Date(info.gameStartTimestamp).toLocaleString();
