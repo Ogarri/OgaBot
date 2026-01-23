@@ -93,12 +93,13 @@ module.exports = {
   }
 };
 
-// Fonction pour télécharger via youtubeDl.js
+// Fonction pour télécharger via youtubeDl.py
 function downloadYouTubeMp3(url, outputPath) {
   return new Promise((resolve, reject) => {
-    const youtubeDlScript = path.join(__dirname, '../../assets/tracks/youtubeDl.js');
+    const pythonScript = path.join(__dirname, '../../assets/tracks/youtubeDl.py');
+    const venvPython = path.join(__dirname, '../../venv/bin/python');
     
-    const child = spawn('node', [youtubeDlScript, url, outputPath]);
+    const child = spawn(venvPython, [pythonScript, url]);
 
     let stdout = '';
     let stderr = '';
@@ -115,7 +116,8 @@ function downloadYouTubeMp3(url, outputPath) {
       if (code === 0) {
         resolve();
       } else {
-        reject(new Error(`youtubeDl.js s'est terminé avec le code ${code}\n${stderr}`));
+        const errorMsg = stderr || stdout || 'Erreur inconnue';
+        reject(new Error(`youtubeDl.py s'est terminé avec le code ${code}\n${errorMsg}`));
       }
     });
 
