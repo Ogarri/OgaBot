@@ -29,9 +29,29 @@ function makeRequest(url) {
 
 async function getLatestMatchId(puuid) {
     try {
-        const url = `https://europe.api.riotgames.com/lol/match/v5/matches/by-puuid/${puuid}/ids?start=0&count=1&api_key=${LOL_API_KEY}`;
-        const matchIds = await makeRequest(url);
-        return matchIds[0] || null;
+        let start = 0;
+        const pageSize = 100;
+
+        while (true) {
+            const url = `https://europe.api.riotgames.com/lol/match/v5/matches/by-puuid/${puuid}/ids?start=${start}&count=${pageSize}&api_key=${LOL_API_KEY}`;
+            const matchIds = await makeRequest(url);
+            
+            if (!matchIds || matchIds.length === 0) {
+                return null;
+            }
+
+            for (const matchId of matchIds) {
+                const matchDetails = await getMatchDetails(matchId);
+                if (matchDetails && matchDetails.info.queueId === 420) {
+                    return matchId;
+                }
+            }
+
+            if (matchIds.length < pageSize) break;
+            start += pageSize;
+        }
+        
+        return null;
     } catch (err) {
         throw new Error(`Erreur match: ${err.message}`);
     }

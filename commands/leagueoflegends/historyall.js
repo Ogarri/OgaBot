@@ -56,38 +56,6 @@ async function getMatchDetails(matchId) {
     }
 }
 
-async function getRankedMatches(puuid, limit = 20) {
-    try {
-        const rankedMatches = [];
-        let start = 0;
-        const pageSize = 100;
-
-        while (rankedMatches.length < limit) {
-            const url = `https://europe.api.riotgames.com/lol/match/v5/matches/by-puuid/${puuid}/ids?start=${start}&count=${pageSize}&api_key=${LOL_API_KEY}`;
-            const matchIds = await makeRequest(url);
-            
-            if (!matchIds || matchIds.length === 0) {
-                break;
-            }
-
-            for (const matchId of matchIds) {
-                if (rankedMatches.length >= limit) break;
-                
-                const matchDetails = await getMatchDetails(matchId);
-                if (matchDetails && matchDetails.info.queueId === 420) {
-                    rankedMatches.push(matchDetails);
-                }
-            }
-            
-            if (matchIds.length < pageSize) break;
-            start += pageSize;
-        }
-        return rankedMatches;
-    } catch (err) {
-        throw new Error(`Erreur ranked: ${err.message}`);
-    }
-}
-
 function getAccountFromFile(discordId) {
     if (!fs.existsSync(ACCOUNTS_FILE)) {
         throw new Error('Aucun compte lié trouvé');
@@ -105,20 +73,28 @@ function getAccountFromFile(discordId) {
 
 module.exports = {
     data: new SlashCommandBuilder()
-        .setName('history')
-        .setDescription('Affiche l\'historique de vos 5 derniers matchs ranked dans la limite des 20 derniers matchs.'),
+        .setName('historyall')
+        .setDescription('Affiche les 20 derniers matchs tous modes confondus.'),
     async execute(interaction) {
         try {
             await interaction.deferReply();
             
             const account = getAccountFromFile(interaction.user.id);
-            const rankedMatches = await getRankedMatches(account.puuid, 5);
+            const matchIds = await getAllMatchIds(account.puuid, 20);
+            const allMatches = [];
+
+            for (const matchId of matchIds) {
+                const matchDetails = await getMatchDetails(matchId);
+                if (matchDetails) {
+                    allMatches.push(matchDetails);
+                }
+            }
             
-            if (rankedMatches.length === 0) {
+            if (allMatches.length === 0) {
                 const errorEmbed = new EmbedBuilder()
                     .setColor('#ff6600')
                     .setTitle('⚠️ Aucun match trouvé')
-                    .setDescription('Aucun match ranked trouvé dans les 20 dernière parties.');
+                    .setDescription('Aucun match trouvé dans l\'historique.');
                 
                 return await interaction.editReply({ embeds: [errorEmbed] });
             }
@@ -126,9 +102,9 @@ module.exports = {
             const embed = new EmbedBuilder()
                 .setColor('#0099ff')
                 .setTitle(`📊 Historique de ${account.gameName}#${account.tagLine}`)
-                .setDescription(`${rankedMatches.length} derniers matchs ranked`);
+                .setDescription(`${allMatches.length} derniers matchs tous modes confondus`);
             
-            rankedMatches.forEach((match, index) => {
+            allMatches.forEach((match, index) => {
                 const info = match.info;
                 const totalSeconds = info.gameDuration;
                 const minutes = Math.floor(totalSeconds / 60);

@@ -10,8 +10,9 @@
 | `/getchamp <champion>` | Affiche les infos d'un champion |
 | `/champroll` | Roll aléatoire d'un champion |
 | `/history` | Affiche vos 5 derniers matchs ranked |
+| `/historyall` | Affiche vos 20 derniers matchs tous modes confondus |
 | `/lolstatus` | Affiche l'état et les infos de votre compte LOL |
-| `/followherestart` | Détecte les nouveaux matchs (toutes les 2 min) |
+| `/followherestart` | Détecte les nouveaux matchs ranked (toutes les 2 min) |
 | `/followherestop` | Arrête la détection |
 
 ### Détails
@@ -43,6 +44,11 @@
 - Requiert un compte lié
 - Affiche le champion, résultat, K/D/A et durée
 
+**`/historyall`**
+- Affiche les 20 derniers matchs tous modes confondus
+- Requiert un compte lié
+- Inclut les matchs ranked, normal et autres modes
+
 **`/lolstatus`**
 - Affiche l'état et les informations de votre compte LOL lié
 - Requiert un compte lié
@@ -51,7 +57,7 @@
 **`/followherestart`**
 - Vérifie tous les comptes tous les 2 minutes
 - Une seule boucle par canal
-- Affiche les matchs de tous les utilisateurs du canal
+- Affiche les nouveaux matchs ranked de tous les utilisateurs du canal
 
 **`/followherestop`**
 - Arrête la détection des matchs dans le canal courant
