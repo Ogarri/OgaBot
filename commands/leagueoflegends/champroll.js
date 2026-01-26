@@ -22,7 +22,7 @@ module.exports = {
         .setDMPermission(true)
         .setDefaultMemberPermissions(null),
 
-    async run(interaction) {
+    async execute(interaction) {
         const selectedRole = interaction.options.getString("role");
         
         // Filtrer les champions par rôle

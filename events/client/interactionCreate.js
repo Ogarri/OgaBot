@@ -12,7 +12,7 @@ module.exports = {
                 await command.execute(interaction);
             } catch (error) {
                 console.error(error);
-                await interaction.reply({ content: '✗ Erreur lors de l\'exécution de la commande.', ephemeral: true });
+                await interaction.reply({ content: '✗ Erreur lors de l\'exécution de la commande.', flags: 64 });
             }
         };
     }
