@@ -10,6 +10,7 @@
 | `/getchamp <champion>` | Affiche les infos d'un champion |
 | `/champroll` | Roll aléatoire d'un champion |
 | `/history` | Affiche vos 5 derniers matchs ranked |
+| `/lolstatus` | Affiche l'état et les infos de votre compte LOL |
 | `/followherestart` | Détecte les nouveaux matchs (toutes les 2 min) |
 | `/followherestop` | Arrête la détection |
 
@@ -41,6 +42,11 @@
 - Affiche les 5 derniers matchs ranked
 - Requiert un compte lié
 - Affiche le champion, résultat, K/D/A et durée
+
+**`/lolstatus`**
+- Affiche l'état et les informations de votre compte LOL lié
+- Requiert un compte lié
+- Informations: niveau du compte, ligue actuelle, points de ranked
 
 **`/followherestart`**
 - Vérifie tous les comptes tous les 2 minutes
