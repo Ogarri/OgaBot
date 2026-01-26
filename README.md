@@ -21,6 +21,11 @@ LOL_API_KEY=votre_clé_api_riot_ici
 node main.js
 ```
 
+## Dépendances
+
+- **discord.js** (^14.25.1) : Framework Discord
+- **dotenv** (^17.2.3) : Gestion des variables d'environnement
+
 ## Structure du projet
 
 ```
@@ -28,28 +33,20 @@ OgaBot/
 ├── assets/
 │   ├── lolacc.json         # Comptes League of Legends liés
 │   ├── lastMatches.json    # Derniers matchs détectés
-│   ├── champslol.json      # Base de données des champions
-│   └── tracks/
-│       ├── youtubeDl.js    # Téléchargement YouTube
-│       ├── queueManager.js # Gestion de la queue musicale
-│       └── downloads/      # Fichiers MP3 téléchargés
+│   └── champslol.json      # Base de données des champions
 ├── commands/               # Commandes slash
 │   ├── leagueoflegends/
 │   │   ├── loglolacc.js      # Lier un compte LOL
 │   │   ├── unloglolacc.js    # Délier un compte LOL
 │   │   ├── history.js        # Historique des matchs
+│   │   ├── champroll.js      # Roll aléatoire de champion
+│   │   ├── getchamp.js       # Informations sur un champion
+│   │   ├── refreshpuuid.js   # Rafraîchir le PUUID
 │   │   ├── followherestart.js # Démarrer la détection
 │   │   └── followherestop.js  # Arrêter la détection
-│   └── music/
-│       ├── join.js         # Rejoindre le salon vocal
-│       ├── leave.js        # Quitter le salon vocal
-│       ├── play.js         # Jouer une musique YouTube
-│       ├── pause.js        # Mettre en pause
-│       ├── resume.js       # Reprendre
-│       ├── stop.js         # Arrêter
-│       ├── skip.js         # Passer à la suivante
-│       ├── queue.js        # Afficher la queue
-│       └── clearqueue.js   # Vider la queue
+│   └── utils/
+│       ├── ping.js         # Latence du bot
+│       └── status.js       # État du bot
 ├── events/                 # Événements Discord
 │   └── client/
 │       ├── interactionCreate.js
@@ -68,22 +65,17 @@ Pour la liste complète des commandes, consultez [COMMANDES.md](./COMMANDES.md).
 
 ### Catégories
 
-- **Musique** : Lecture YouTube, gestion de la queue
-- **League of Legends** : Gestion des comptes et suivi des matchs
+- **League of Legends** : Gestion des comptes, suivi des matchs, infos champions
 - **Utilitaires** : Ping, Status
 
 ## Fonctionnalités principales
 
-### Lecteur musical avec YouTube
-- Téléchargement automatique de musiques YouTube en MP3
-- Système de queue pour écouter plusieurs musiques à la suite
-- Contrôle de la lecture (pause, reprise, arrêt, skip)
-- Gestion automatique des fichiers téléchargés
-
 ### Gestion des comptes League of Legends
 - Lier votre compte LOL à Discord
 - Délier votre compte
-- Consulter l'historique de vos matchs ranked
+- Consulter l'historique de vos 5 derniers matchs ranked
+- Informations détaillées sur les champions
+- Roll aléatoire de champion
 
 ### Suivi des matchs en temps réel
 - Détection automatique des nouveaux matchs ranked
