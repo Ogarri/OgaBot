@@ -67,6 +67,27 @@ async function getMatchDetails(matchId) {
     }
 }
 
+async function getLeagueInfo(puuid) {
+    try {
+        const url = `https://euw1.api.riotgames.com/lol/league/v4/entries/by-puuid/${puuid}?api_key=${LOL_API_KEY}`;
+        const leagueData = await makeRequest(url);
+        if (leagueData && leagueData.length > 0) {
+            // Trouver l'entrée RANKED_SOLO_5x5
+            const rankedData = leagueData.find(entry => entry.queueType === 'RANKED_SOLO_5x5');
+            if (rankedData) {
+                return {
+                    tier: rankedData.tier,
+                    rank: rankedData.rank,
+                    lp: rankedData.leaguePoints
+                };
+            }
+        }
+        return null;
+    } catch (err) {
+        throw new Error(`Erreur ligue: ${err.message}`);
+    }
+}
+
 function getLastMatches() {
     if (!fs.existsSync(LAST_MATCHES_FILE)) {
         return {};
@@ -75,9 +96,12 @@ function getLastMatches() {
     return JSON.parse(data);
 }
 
-function saveLastMatch(discordId, matchId) {
+function saveLastMatch(discordId, matchId, lp) {
     let lastMatches = getLastMatches();
-    lastMatches[discordId] = matchId;
+    lastMatches[discordId] = {
+        matchId: matchId,
+        lp: lp
+    };
     fs.writeFileSync(LAST_MATCHES_FILE, JSON.stringify(lastMatches, null, 2));
 }
 
@@ -118,23 +142,63 @@ async function checkNewMatches(channel, client) {
                     const csPerMin = (totalCS / (totalSeconds / 60)).toFixed(2);
                     const timestamp = new Date(info.gameStartTimestamp).toLocaleString();
 
+                    // Récupérer les infos de ligue actuelle
+                    let leagueInfo = null;
+                    let lpChangeText = '';
+                    try {
+                        leagueInfo = await getLeagueInfo(account.puuid);
+                        const lastMatchData = lastMatches[discordId];
+                        const previousLp = typeof lastMatchData === 'object' ? lastMatchData.lp : 0;
+                        if (leagueInfo) {
+                            const lpChange = leagueInfo.lp - previousLp;
+                            const lpChangeSymbol = lpChange > 0 ? '📈' : '📉';
+                            lpChangeText = `${lpChangeSymbol} ${lpChange > 0 ? '+' : ''}${lpChange} LP (${previousLp} → ${leagueInfo.lp})`;
+                        }
+                    } catch (err) {
+                        console.error(`[FOLLOWHERE] Erreur récupération ligue:`, err.message);
+                    }
+
+                    const embedFields = [
+                        { name: '⚔️ Champion', value: champion, inline: true },
+                        { name: '📊 Résultat', value: result, inline: true },
+                        { name: '💀 K/D/A', value: kda, inline: true },
+                        { name: '🔥 Dégâts', value: damage.toString(), inline: true },
+                        { name: '⏱️ Durée', value: gameDurationFormatted, inline: true },
+                        { name: '🌾 CS/min', value: csPerMin, inline: true }
+                    ];
+
+                    if (leagueInfo) {
+                        embedFields.push(
+                            { name: '🏅 Rang', value: `${leagueInfo.tier} ${leagueInfo.rank}`, inline: true },
+                            { name: '⭐ LP', value: leagueInfo.lp.toString(), inline: true }
+                        );
+                    }
+
+                    if (lpChangeText) {
+                        embedFields.push(
+                            { name: '📊 Changement LP', value: lpChangeText, inline: false }
+                        );
+                    }
+
+                    embedFields.push(
+                        { name: '🆔 Match ID', value: `\`${latestMatchId}\``, inline: false }
+                    );
+
                     const embed = new EmbedBuilder()
                         .setColor(resultColor)
                         .setTitle(`🎮 ${account.gameName}#${account.tagLine}`)
                         .setDescription(`Vient de terminer une partie`)
-                        .addFields(
-                            { name: '⚔️ Champion', value: champion, inline: true },
-                            { name: '📊 Résultat', value: result, inline: true },
-                            { name: '💀 K/D/A', value: kda, inline: true },
-                            { name: '🔥 Dégâts', value: damage.toString(), inline: true },
-                            { name: '⏱️ Durée', value: gameDurationFormatted, inline: true },
-                            { name: '🌾 CS/min', value: csPerMin, inline: true },
-                            { name: '🆔 Match ID', value: `\`${latestMatchId}\``, inline: false }
-                        )
+                        .addFields(...embedFields)
                         .setFooter({ text: timestamp });
 
                     await channel.send({ embeds: [embed] });
-                    saveLastMatch(discordId, latestMatchId);
+                    if (leagueInfo) {
+                        saveLastMatch(discordId, latestMatchId, leagueInfo.lp);
+                    } else {
+                        const lastMatchData = lastMatches[discordId];
+                        const previousLp = typeof lastMatchData === 'object' ? lastMatchData.lp : 0;
+                        saveLastMatch(discordId, latestMatchId, previousLp);
+                    }
                     console.log(`[FOLLOWHERE] Nouveau match détecté pour ${account.gameName}#${account.tagLine}`);
                 }
             }
