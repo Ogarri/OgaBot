@@ -121,7 +121,8 @@ async function checkNewMatches(channel, client) {
     for (const [discordId, account] of Object.entries(accounts)) {
         try {
             const latestMatchId = await getLatestMatchId(account.puuid);
-            const lastMatchId = lastMatches[discordId];
+            const lastMatchData = lastMatches[discordId];
+            const lastMatchId = typeof lastMatchData === 'object' ? lastMatchData.matchId : lastMatchData;
 
             if (latestMatchId && latestMatchId !== lastMatchId) {
                 const matchDetails = await getMatchDetails(latestMatchId);
@@ -145,14 +146,18 @@ async function checkNewMatches(channel, client) {
                     // Récupérer les infos de ligue actuelle
                     let leagueInfo = null;
                     let lpChangeText = '';
+                    let lpChanged = false;
                     try {
                         leagueInfo = await getLeagueInfo(account.puuid);
                         const lastMatchData = lastMatches[discordId];
                         const previousLp = typeof lastMatchData === 'object' ? lastMatchData.lp : 0;
                         if (leagueInfo) {
                             const lpChange = leagueInfo.lp - previousLp;
-                            const lpChangeSymbol = lpChange > 0 ? '📈' : '📉';
-                            lpChangeText = `${lpChangeSymbol} ${lpChange > 0 ? '+' : ''}${lpChange} LP (${previousLp} → ${leagueInfo.lp})`;
+                            if (lpChange !== 0) {
+                                lpChanged = true;
+                                const lpChangeSymbol = lpChange > 0 ? '📈' : '📉';
+                                lpChangeText = `${lpChangeSymbol} ${lpChange > 0 ? '+' : ''}${lpChange} LP (${previousLp} → ${leagueInfo.lp})`;
+                            }
                         }
                     } catch (err) {
                         console.error(`[FOLLOWHERE] Erreur récupération ligue:`, err.message);
@@ -167,7 +172,7 @@ async function checkNewMatches(channel, client) {
                         { name: '🌾 CS/min', value: csPerMin, inline: true }
                     ];
 
-                    if (leagueInfo) {
+                    if (leagueInfo && lpChanged) {
                         embedFields.push(
                             { name: '🏅 Rang', value: `${leagueInfo.tier} ${leagueInfo.rank}`, inline: true },
                             { name: '⭐ LP', value: leagueInfo.lp.toString(), inline: true }
