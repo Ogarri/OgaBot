@@ -58,6 +58,7 @@
 - Vérifie tous les comptes tous les 2 minutes
 - Une seule boucle par canal
 - Affiche les nouveaux matchs ranked de tous les utilisateurs du canal
+- Affiche le champion, résultat, K/D/A, LP et durée
 
 **`/followherestop`**
 - Arrête la détection des matchs dans le canal courant

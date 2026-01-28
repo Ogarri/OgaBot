@@ -25,6 +25,7 @@ node main.js
 
 - **discord.js** (^14.25.1) : Framework Discord
 - **dotenv** (^17.2.3) : Gestion des variables d'environnement
+- **axios** (^1.13.3) : Client HTTP pour les requêtes API
 
 ## Structure du projet
 
@@ -80,7 +81,7 @@ Pour la liste complète des commandes, consultez [COMMANDES.md](./COMMANDES.md).
 ### Suivi des matchs en temps réel
 - Détection automatique des nouveaux matchs ranked
 - Notifications en direct dans un canal Discord
-- Affichage du champion, résultat, K/D/A et durée
+- Affichage du champion, résultat, K/D/A, LP et durée
 
 ## Développement
 
@@ -103,16 +104,6 @@ module.exports = {
     }
 };
 ```
-
-## Prérequis
-
-- Node.js >= 16.0.0
-- discord.js >= 14.0.0
-- @discordjs/voice
-- youtube-dl-exec
-- ffmpeg-static
-- @snazzah/davey
-- dotenv
 
 ## Licence
 
