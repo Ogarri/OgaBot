@@ -44,6 +44,8 @@ OgaBot/
 │   │   ├── historyflex.js      # Historique des matchs Ranked Flex
 │   │   ├── champroll.js        # Roll aléatoire de champion
 │   │   ├── getchamp.js         # Informations sur un champion
+│   │   ├── profile.js          # Profil LOL avec rang
+│   │   ├── lolstatus.js        # État et infos du compte LOL
 │   │   ├── refreshpuuid.js     # Rafraîchir le PUUID
 │   │   ├── followherestart.js  # Démarrer la détection
 │   │   └── followherestop.js   # Arrêter la détection

@@ -13,6 +13,7 @@
 | `/historyranked` | Affiche vos matchs classés 5v5 Solo parmi les 20 derniers |
 | `/historyflex` | Affiche vos matchs classés 5v5 Flex parmi les 20 derniers |
 | `/lolstatus` | Affiche l'état et les infos de votre compte LOL |
+| `/profile` | Affiche votre profil LOL avec votre rang |
 | `/followherestart` | Détecte les nouveaux matchs ranked (toutes les 2 min) |
 | `/followherestop` | Arrête la détection |
 
@@ -61,6 +62,12 @@
 - Affiche l'état et les informations de votre compte LOL lié
 - Requiert un compte lié
 - Informations: niveau du compte, ligue actuelle, points de ranked
+
+**`/profile`**
+- Affiche votre profil LOL avec votre rang
+- Requiert un compte lié
+- Affiche votre niveau, votre tier/rank, points de ranked, victoires/défaites
+- Inclus un badge visuel de votre rang
 
 **`/followherestart`**
 - Vérifie tous les comptes tous les 2 minutes

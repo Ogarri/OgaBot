@@ -24,6 +24,7 @@ module.exports = {
 \`/historyranked\` - Affiche vos matchs classés Solo
 \`/historyflex\` - Affiche vos matchs classés Flex
 \`/lolstatus\` - Affiche l'état de votre compte LOL
+\`/profile\` - Affiche votre profil LOL avec votre rang
 \`/followherestart\` - Détecte les nouveaux matchs ranked
 \`/followherestop\` - Arrête la détection
                     `,
