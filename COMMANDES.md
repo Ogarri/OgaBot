@@ -79,6 +79,7 @@
 |----------|-------------|
 | `/ping` | Affiche la latence du bot |
 | `/status` | Affiche l'état du bot (ping, uptime, serveurs) |
+| `/help` | Affiche la liste des commandes disponibles |
 
 ### Détails
 
@@ -91,3 +92,8 @@
 - Ping vers Discord
 - Uptime du bot
 - Nombre de serveurs où le bot est présent
+
+**`/help`**
+- Affiche la liste complète des commandes disponibles
+- Organisées par catégorie (League of Legends et Utilitaires)
+- Accès rapide aux descriptions simplifiées

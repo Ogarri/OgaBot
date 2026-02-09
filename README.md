@@ -49,7 +49,8 @@ OgaBot/
 │   │   └── followherestop.js   # Arrêter la détection
 │   └── utils/
 │       ├── ping.js         # Latence du bot
-│       └── status.js       # État du bot
+│       ├── status.js       # État du bot
+│       └── help.js         # Aide et liste des commandes
 ├── events/                 # Événements Discord
 │   └── client/
 │       ├── interactionCreate.js
@@ -69,7 +70,7 @@ Pour la liste complète des commandes, consultez [COMMANDES.md](./COMMANDES.md).
 ### Catégories
 
 - **League of Legends** : Gestion des comptes, suivi des matchs, infos champions
-- **Utilitaires** : Ping, Status
+- **Utilitaires** : Aide, Ping, Status
 
 ## Fonctionnalités principales
 
