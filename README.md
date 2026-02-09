@@ -37,14 +37,16 @@ OgaBot/
 │   └── champslol.json      # Base de données des champions
 ├── commands/               # Commandes slash
 │   ├── leagueoflegends/
-│   │   ├── loglolacc.js      # Lier un compte LOL
-│   │   ├── unloglolacc.js    # Délier un compte LOL
-│   │   ├── history.js        # Historique des matchs
-│   │   ├── champroll.js      # Roll aléatoire de champion
-│   │   ├── getchamp.js       # Informations sur un champion
-│   │   ├── refreshpuuid.js   # Rafraîchir le PUUID
-│   │   ├── followherestart.js # Démarrer la détection
-│   │   └── followherestop.js  # Arrêter la détection
+│   │   ├── loglolacc.js        # Lier un compte LOL
+│   │   ├── unloglolacc.js      # Délier un compte LOL
+│   │   ├── history.js          # Historique de tous les matchs
+│   │   ├── historyranked.js    # Historique des matchs Ranked Solo
+│   │   ├── historyflex.js      # Historique des matchs Ranked Flex
+│   │   ├── champroll.js        # Roll aléatoire de champion
+│   │   ├── getchamp.js         # Informations sur un champion
+│   │   ├── refreshpuuid.js     # Rafraîchir le PUUID
+│   │   ├── followherestart.js  # Démarrer la détection
+│   │   └── followherestop.js   # Arrêter la détection
 │   └── utils/
 │       ├── ping.js         # Latence du bot
 │       └── status.js       # État du bot

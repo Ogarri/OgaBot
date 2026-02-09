@@ -9,8 +9,9 @@
 | `/refreshpuuid` | Rafraîchit le PUUID de votre compte LOL lié |
 | `/getchamp <champion>` | Affiche les infos d'un champion |
 | `/champroll` | Roll aléatoire d'un champion |
-| `/history` | Affiche vos 5 derniers matchs ranked |
-| `/historyall` | Affiche vos 20 derniers matchs tous modes confondus |
+| `/history` | Affiche vos 20 derniers matchs tous modes confondus |
+| `/historyranked` | Affiche vos matchs classés 5v5 Solo parmi les 20 derniers |
+| `/historyflex` | Affiche vos matchs classés 5v5 Flex parmi les 20 derniers |
 | `/lolstatus` | Affiche l'état et les infos de votre compte LOL |
 | `/followherestart` | Détecte les nouveaux matchs ranked (toutes les 2 min) |
 | `/followherestop` | Arrête la détection |
@@ -40,14 +41,21 @@
 - Pas de paramètres nécessaires
 
 **`/history`**
-- Affiche les 5 derniers matchs ranked
-- Requiert un compte lié
-- Affiche le champion, résultat, K/D/A et durée
-
-**`/historyall`**
 - Affiche les 20 derniers matchs tous modes confondus
 - Requiert un compte lié
-- Inclut les matchs ranked, normal et autres modes
+- Affiche le champion, résultat, K/D/A, dégâts, or et CS
+
+**`/historyranked`**
+- Affiche vos matchs classés 5v5 Solo parmi les 20 derniers
+- Filtre pour n'afficher que les matchs Ranked Solo (queueId 420)
+- Requiert un compte lié
+- Message si aucun match classé trouvé dans les 20 derniers
+
+**`/historyflex`**
+- Affiche vos matchs classés 5v5 Flex parmi les 20 derniers
+- Filtre pour n'afficher que les matchs Ranked Flex (queueId 440)
+- Requiert un compte lié
+- Message si aucun match Flex trouvé dans les 20 derniers
 
 **`/lolstatus`**
 - Affiche l'état et les informations de votre compte LOL lié
