@@ -1031,6 +1031,12 @@
       "role": "Support",
       "category": "Mage",
       "splash": "https://ddragon.leagueoflegends.com/cdn/img/champion/splash/Zyra_0.jpg"
+    },
+    {
+      "name": "Locke",
+      "role": "Mid",
+      "category": "Mage",
+      "splash": "https://ddragon.leagueoflegends.com/cdn/img/champion/splash/Locke_0.jpg"
     }
   ],
 
